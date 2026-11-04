@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="pt-BR" class="aos-fallback">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a2f1d">
+  <meta name="description" content="Catálogo de Natal Mary Santos Confeitaria. Sobremesas artesanais para celebrar, com encomendas confirmadas mediante 50% de entrada.">
+  <meta property="og:title" content="Mary Santos Confeitaria — Catálogo de Natal">
+  <meta property="og:description" content="Sobremesas especiais para celebrar. Conheça a coleção de Natal e faça sua encomenda pelo WhatsApp.">
+  <meta property="og:type" content="website">
+  <title>Mary Santos Confeitaria | Catálogo de Natal</title>
+
+  <!-- Tailwind CSS via CDN: útil para utilitários e ajustes rápidos sem build. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tipografia editorial: Playfair Display nos títulos e Inter nos textos. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- AOS: animações suaves ao entrar na área visível. -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --pine: #0a2f1d;
+      --pine-2: #123e2a;
+      --pine-3: #1d5138;
+      --gold: #d4af37;
+      --gold-light: #ecd78d;
+      --cream: #f7f4ed;
+      --paper: #fffdf8;
+      --ink: #1c2821;
+      --muted: #69746c;
+      --line: rgba(10, 47, 29, .12);
+      --serif: "Playfair Display", Georgia, serif;
+      --sans: "Inter", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--cream);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    ::selection { background: rgba(212, 175, 55, .28); color: var(--pine); }
+
+    .font-display { font-family: var(--serif); }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--gold-light);
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before, .eyebrow::after {
+      content: "";
+      width: 22px;
+      height: 1px;
+      background: currentColor;
+      opacity: .75;
+    }
+
+    /* Cabeçalho */
+    .site-header {
+      position: sticky;
+      z-index: 50;
+      top: 0;
+      border-bottom: 1px solid rgba(212,175,55,.17);
+      background: rgba(8, 39, 24, .94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .header-inner {
+      width: min(1180px, calc(100% - 48px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { display: inline-flex; align-items: center; gap: 12px; color: #fff9e9; }
+    .brand-seal {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(212,175,55,.75);
+      border-radius: 50%;
+      color: var(--gold-light);
+      font: 600 1.35rem var(--serif);
+      box-shadow: inset 0 0 0 3px rgba(212,175,55,.08);
+    }
+    .brand-name { display: block; font: 600 1.05rem var(--serif); letter-spacing: .025em; }
+    .brand-caption { display: block; margin-top: 2px; color: rgba(255,249,233,.62); font-size: .55rem; letter-spacing: .2em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 30px; color: rgba(255,249,233,.78); font-size: .78rem; }
+    .nav-links a { transition: color .25s ease; }
+    .nav-links a:hover { color: var(--gold-light); }
+    .header-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 11px 16px;
+      border: 1px solid rgba(212,175,55,.58);
+      border-radius: 999px;
+      color: var(--gold-light);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      transition: background .25s ease, color .25s ease, transform .25s ease;
+    }
+    .header-cta:hover { background: var(--gold); color: var(--pine); transform: translateY(-2px); }
+    .menu-toggle { display: none; border: 0; background: none; color: #fff8e9; padding: 8px; cursor: pointer; }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      min-height: 670px;
+      overflow: hidden;
+      isolation: isolate;
+      color: #fff9e9;
+      background:
+        radial-gradient(ellipse at 82% 48%, rgba(54,91,62,.54), transparent 39%),
+        radial-gradient(ellipse at 14% 8%, rgba(212,175,55,.09), transparent 28%),
+        linear-gradient(125deg, #082919 0%, var(--pine) 54%, #092819 100%);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 600px;
+      height: 600px;
+      right: -160px;
+      top: 70px;
+      border: 1px solid rgba(212,175,55,.16);
+      border-radius: 50%;
+      box-shadow: 0 0 0 34px rgba(212,175,55,.025), 0 0 0 70px rgba(212,175,55,.018);
+    }
+    .hero-inner {
+      position: relative;
+      width: min(1180px, calc(100% - 48px));
+      min-height: 670px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.02fr .98fr;
+      align-items: center;
+      gap: 35px;
+      padding: 76px 0 86px;
+    }
+    .hero-copy { position: relative; z-index: 2; max-width: 640px; padding-bottom: 16px; }
+    .hero h1 {
+      max-width: 660px;
+      margin: 22px 0 20px;
+      color: #fff8e8;
+      font: 500 clamp(3rem, 5.3vw, 5.25rem)/1.04 var(--serif);
+      letter-spacing: -.045em;
+    }
+    .hero h1 em { color: var(--gold); font-weight: 400; }
+    .hero-description {
+      max-width: 480px;
+      margin: 0;
+      color: rgba(255,249,233,.73);
+      font-size: .99rem;
+      line-height: 1.85;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 34px; }
+    .button-primary {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      min-height: 52px;
+      padding: 0 23px;
+      border: 1px solid var(--gold);
+      border-radius: 4px;
+      background: var(--gold);
+      color: #102c1d;
+      font-size: .77rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+    }
+    .button-primary:hover { transform: translateY(-3px); background: #e0bf52; box-shadow: 0 12px 30px rgba(0,0,0,.2); }
+    .button-quiet {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 4px;
+      color: rgba(255,249,233,.82);
+      font-size: .77rem;
+      font-weight: 600;
+      transition: color .2s ease;
+    }
+    .button-quiet:hover { color: var(--gold-light); }
+    .hero-note {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: fit-content;
+      margin-top: 42px;
+      padding: 14px 17px;
+      border: 1px solid rgba(212,175,55,.36);
+      background: rgba(255,255,255,.045);
+      backdrop-filter: blur(8px);
+    }
+    .hero-note-mark {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(212,175,55,.6);
+      border-radius: 50%;
+      color: var(--gold-light);
+      font: 1rem var(--serif);
+    }
+    .hero-note strong { display: block; color: #fff5dc; font-size: .73rem; letter-spacing: .03em; }
+    .hero-note span { display: block; margin-top: 3px; color: rgba(255,249,233,.6); font-size: .65rem; }
+    .hero-visual { position: relative; display: grid; place-items: center; min-height: 500px; }
+    .hero-orbit {
+      position: absolute;
+      width: min(43vw, 510px);
+      aspect-ratio: 1;
+      border: 1px solid rgba(212,175,55,.34);
+      border-radius: 50%;
+      box-shadow: 0 0 0 20px rgba(212,175,55,.025), 0 0 0 58px rgba(212,175,55,.02);
+    }
+    .hero-product {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 570px);
+      max-height: 510px;
+      object-fit: contain;
+      filter: drop-shadow(0 28px 25px rgba(0,0,0,.25));
+      animation: hero-float 7s ease-in-out infinite;
+    }
+    .hero-stamp {
+      position: absolute;
+      z-index: 2;
+      right: 0;
+      bottom: 42px;
+      width: 110px;
+      height: 110px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(212,175,55,.82);
+      border-radius: 50%;
+      color: var(--gold-light);
+      background: rgba(9,43,27,.86);
+      text-align: center;
+      transform: rotate(9deg);
+      box-shadow: 0 12px 30px rgba(0,0,0,.18);
+    }
+    .hero-stamp span { max-width: 75px; font: 500 .78rem/1.45 var(--serif); letter-spacing: .04em; }
+    @keyframes hero-float { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-12px) rotate(1deg); } }
+
+    /* Neve decorativa leve, sem canvas ou loops de JavaScript. */
+    .snow-layer { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; opacity: .23; }
+    .snow-layer::before, .snow-layer::after {
+      content: "";
+      position: absolute;
+      inset: -100% 0 0;
+      background-image:
+        radial-gradient(2px 2px at 12% 17%, #fff 98%, transparent),
+        radial-gradient(1.5px 1.5px at 68% 26%, #fff 98%, transparent),
+        radial-gradient(2px 2px at 84% 58%, #fff 98%, transparent),
+        radial-gradient(1px 1px at 33% 76%, #fff 98%, transparent),
+        radial-gradient(1.5px 1.5px at 52% 43%, #fff 98%, transparent),
+        radial-gradient(1px 1px at 91% 12%, #fff 98%, transparent);
+      background-size: 280px 280px;
+      animation: snowfall 34s linear infinite;
+    }
+    .snow-layer::after { opacity: .55; transform: translateX(45px); background-size: 390px 390px; animation-duration: 48s; }
+    @keyframes snowfall { to { transform: translateY(100%); } }
+
+    /* Faixa de encomendas */
+    .announcement-wrap { position: relative; z-index: 3; margin-top: -1px; background: var(--gold); }
+    .announcement {
+      width: min(1180px, calc(100% - 48px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      color: var(--pine);
+      text-align: center;
+    }
+    .announcement strong { font: 600 1.12rem var(--serif); }
+    .announcement span { font-size: .75rem; letter-spacing: .04em; }
+    .announcement-divider { width: 1px; height: 25px; background: rgba(10,47,29,.32); }
+
+    /* Seção de produtos */
+    .collection { padding: 112px 0 116px; background: var(--cream); }
+    .section-inner { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
+    .section-heading { max-width: 650px; margin: 0 auto 52px; text-align: center; }
+    .section-kicker { color: #9a7921; font-size: .67rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; }
+    .section-heading h2 { margin: 14px 0 14px; color: var(--pine); font: 500 clamp(2.35rem, 4.2vw, 3.65rem)/1.14 var(--serif); letter-spacing: -.035em; }
+    .section-heading p { margin: 0; color: var(--muted); font-size: .9rem; line-height: 1.85; }
+    .product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
+    .product-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid rgba(10,47,29,.1);
+      background: var(--paper);
+      box-shadow: 0 7px 22px rgba(29,41,32,.035);
+      transition: transform .45s cubic-bezier(.2,.75,.25,1), box-shadow .45s ease, border-color .35s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(212,175,55,.65);
+      box-shadow: 0 22px 48px rgba(29,41,32,.11), 0 0 0 1px rgba(212,175,55,.1);
+    }
+    .product-image-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      height: 280px;
+      overflow: hidden;
+      padding: 22px;
+      background:
+        radial-gradient(circle at 50% 56%, rgba(255,255,255,.92), transparent 55%),
+        linear-gradient(135deg, #f1eee5 0%, #f8f5ed 55%, #ece8dc 100%);
+    }
+    .product-image-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(212,175,55,.22);
+      pointer-events: none;
+    }
+    .product-image {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 14px 13px rgba(36,31,20,.13));
+      transition: transform .7s cubic-bezier(.2,.75,.25,1);
+    }
+    .product-card:hover .product-image { transform: scale(1.07); }
+    .product-number {
+      position: absolute;
+      z-index: 2;
+      top: 21px;
+      left: 22px;
+      color: rgba(10,47,29,.58);
+      font: 500 .65rem var(--serif);
+      letter-spacing: .12em;
+    }
+    .product-content { display: flex; flex: 1; flex-direction: column; padding: 25px 25px 24px; }
+    .product-topline { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; }
+    .product-category { display: block; margin-bottom: 8px; color: #a17e22; font-size: .59rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    .product-title { margin: 0; color: var(--pine); font: 600 1.47rem/1.2 var(--serif); letter-spacing: -.02em; }
+    .product-price { flex: 0 0 auto; color: var(--pine); font: 600 1.24rem var(--serif); white-space: nowrap; }
+    .product-price small { display: block; margin-bottom: 2px; color: #9a7921; font: 700 .52rem var(--sans); letter-spacing: .12em; text-align: right; text-transform: uppercase; }
+    .serving {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      align-self: flex-start;
+      margin: 17px 0 16px;
+      padding: 7px 10px;
+      border: 1px solid rgba(10,47,29,.12);
+      border-radius: 2px;
+      color: #526157;
+      background: #f7f6f0;
+      font-size: .64rem;
+      font-weight: 600;
+    }
+    .serving svg { color: #a58227; flex: 0 0 auto; }
+    .ingredients-label { margin-bottom: 7px; color: #9a7921; font-size: .58rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    .ingredients { margin: 0 0 22px; color: #657168; font-size: .79rem; line-height: 1.8; }
+    .product-order {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: auto;
+      min-height: 47px;
+      border: 1px solid var(--pine);
+      background: var(--pine);
+      color: #fff9e9;
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: color .25s ease, background .25s ease, border-color .25s ease;
+    }
+    .product-order:hover { border-color: var(--gold); background: var(--gold); color: var(--pine); }
+    .product-order svg { transition: transform .25s ease; }
+    .product-order:hover svg { transform: translateX(3px); }
+
+    /* Regras e atendimento */
+    .order-section {
+      position: relative;
+      overflow: hidden;
+      padding: 105px 0 110px;
+      color: #fff9e9;
+      background:
+        radial-gradient(circle at 93% 12%, rgba(212,175,55,.11), transparent 25%),
+        linear-gradient(130deg, #082919, #0d3924 65%, #092a1b);
+    }
+    .order-section::after {
+      content: "M";
+      position: absolute;
+      right: 3%;
+      bottom: -190px;
+      color: rgba(212,175,55,.035);
+      font: 600 33rem/.9 var(--serif);
+      pointer-events: none;
+    }
+    .order-inner { position: relative; z-index: 1; width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
+    .order-heading { max-width: 660px; margin: 0 auto 52px; text-align: center; }
+    .order-heading .section-kicker { color: var(--gold-light); }
+    .order-heading h2 { margin: 14px 0; color: #fff8e9; font: 500 clamp(2.3rem, 4vw, 3.5rem)/1.15 var(--serif); }
+    .order-heading p { margin: 0; color: rgba(255,249,233,.68); font-size: .86rem; line-height: 1.8; }
+    .rules-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .rule-card { min-height: 208px; padding: 28px 26px; border: 1px solid rgba(212,175,55,.27); background: rgba(255,255,255,.045); }
+    .rule-icon { width: 38px; height: 38px; display: grid; place-items: center; margin-bottom: 21px; border: 1px solid rgba(212,175,55,.65); border-radius: 50%; color: var(--gold-light); }
+    .rule-card h3 { margin: 0 0 9px; color: #fff7e5; font: 600 1.2rem var(--serif); }
+    .rule-card p { margin: 0; color: rgba(255,249,233,.64); font-size: .75rem; line-height: 1.8; }
+    .order-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      margin-top: 28px;
+      padding: 25px 28px;
+      border: 1px solid rgba(212,175,55,.32);
+      background: rgba(212,175,55,.075);
+    }
+    .order-bottom strong { display: block; margin-bottom: 4px; color: #fff8e9; font: 500 1.3rem var(--serif); }
+    .order-bottom p { margin: 0; color: rgba(255,249,233,.65); font-size: .75rem; line-height: 1.7; }
+    .order-bottom .button-primary { flex: 0 0 auto; }
+
+    /* Rodapé */
+    .site-footer { padding: 34px 0; color: rgba(255,249,233,.67); background: #061e13; }
+    .footer-inner { width: min(1180px, calc(100% - 48px)); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .footer-brand { display: flex; align-items: center; gap: 12px; }
+    .footer-brand .brand-seal { width: 36px; height: 36px; font-size: 1.12rem; }
+    .footer-brand strong { display: block; color: #fff7e5; font: 600 1rem var(--serif); }
+    .footer-brand span { display: block; margin-top: 2px; font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; }
+    .footer-note { font-size: .67rem; line-height: 1.7; text-align: right; }
+    .footer-note a { color: var(--gold-light); transition: color .2s ease; }
+    .footer-note a:hover { color: #fff; }
+    .footer-legal { margin-top: 18px; padding-top: 17px; border-top: 1px solid rgba(255,255,255,.08); color: rgba(255,249,233,.38); font-size: .59rem; text-align: center; }
+
+    .focus-visible:focus-visible, a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+    /* Mantém todo o conteúdo visível se o JavaScript/CDN de animação não carregar. */
+    .aos-fallback [data-aos] { opacity: 1 !important; transform: none !important; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    @media (max-width: 980px) {
+      .hero-inner { grid-template-columns: 1fr .85fr; gap: 10px; }
+      .hero-visual { min-height: 430px; }
+      .hero-orbit { width: 42vw; }
+      .hero-product { max-height: 430px; }
+      .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 22px; }
+    }
+    @media (max-width: 720px) {
+      html { scroll-padding-top: 72px; }
+      .header-inner { width: min(100% - 34px, 1180px); min-height: 68px; }
+      .brand-seal { width: 38px; height: 38px; }
+      .menu-toggle { display: inline-grid; place-items: center; }
+      .header-cta { display: none; }
+      .nav-links {
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 8px 22px 17px;
+        border-bottom: 1px solid rgba(212,175,55,.2);
+        background: rgba(8,39,24,.98);
+      }
+      .nav-links.is-open { display: flex; }
+      .nav-links a { padding: 13px 3px; border-bottom: 1px solid rgba(255,255,255,.07); }
+      .hero { min-height: auto; }
+      .hero-inner { width: min(100% - 38px, 580px); min-height: auto; grid-template-columns: 1fr; gap: 0; padding: 72px 0 45px; }
+      .hero-copy { padding-bottom: 0; }
+      .hero h1 { max-width: 560px; margin-top: 20px; font-size: clamp(2.85rem, 12vw, 4.4rem); }
+      .hero-description { max-width: 500px; font-size: .88rem; }
+      .hero-note { margin-top: 28px; }
+      .hero-visual { min-height: 320px; margin-top: 12px; }
+      .hero-orbit { width: min(78vw, 360px); }
+      .hero-product { width: min(100%, 410px); max-height: 350px; }
+      .hero-stamp { right: 3%; bottom: 15px; width: 82px; height: 82px; }
+      .hero-stamp span { font-size: .65rem; }
+      .announcement { width: calc(100% - 28px); min-height: 72px; gap: 10px; flex-wrap: wrap; padding: 13px 0; }
+      .announcement strong { font-size: 1rem; }
+      .announcement span { font-size: .65rem; }
+      .announcement-divider { height: 19px; }
+      .section-inner, .order-inner { width: min(100% - 36px, 580px); }
+      .collection { padding: 78px 0 82px; }
+      .section-heading { margin-bottom: 34px; }
+      .section-heading p { font-size: .82rem; }
+      .product-grid { grid-template-columns: 1fr; gap: 20px; }
+      .product-image-wrap { height: 275px; }
+      .product-content { padding: 23px 22px 22px; }
+      .product-title { font-size: 1.4rem; }
+      .order-section { padding: 78px 0 82px; }
+      .order-heading { margin-bottom: 34px; }
+      .rules-grid { grid-template-columns: 1fr; gap: 13px; }
+      .rule-card { min-height: auto; padding: 23px; }
+      .rule-icon { margin-bottom: 15px; }
+      .order-bottom { flex-direction: column; align-items: flex-start; padding: 23px; }
+      .order-bottom .button-primary { width: 100%; }
+      .footer-inner { width: calc(100% - 36px); flex-direction: column; align-items: flex-start; }
+      .footer-note { text-align: left; }
+      .footer-legal { text-align: left; }
+    }
+    @media (max-width: 380px) {
+      .hero-actions { align-items: stretch; flex-direction: column; }
+      .button-primary { width: 100%; }
+      .product-topline { flex-direction: column; }
+      .product-price small { text-align: left; }
+      .announcement-divider { display: none; }
+      .announcement { flex-direction: column; gap: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .snow-layer { display: none; }
+    }
+  </style>
+</head>
+<body class="bg-[#f7f4ed] text-[#1c2821]">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#" class="brand">
+        <div class="brand-seal">M</div>
+        <div>
+          <span class="brand-name">Mary Santos</span>
+          <span class="brand-caption">Confeitaria Artesanal</span>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#encomendas">Como Encomendar</a>
+        <a href="#regras">Regras e Prazos</a>
+      </nav>
+      <a href="https://wa.me/5511960324063" target="_blank" rel="noopener" class="header-cta">
+        Falar no WhatsApp
+      </a>
+      <button class="menu-toggle" aria-label="Abrir menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="snow-layer"></div>
+      <div class="hero-inner">
+        <div class="hero-copy" data-aos="fade-up">
+          <span class="eyebrow">Coleção de Natal 2026</span>
+          <h1>Sobremesas artesanais para <em>celebrar</em> com quem você ama.</h1>
+          <p class="hero-description">
+            Transforme sua ceia em um momento inesquecível com receitas exclusivas, ingredientes selecionados e o toque artesanal da Mary Santos.
+          </p>
+          <div class="hero-actions">
+            <a href="#catalogo" class="button-primary">Ver Catálogo de Natal</a>
+            <a href="https://wa.me/5511960324063" target="_blank" rel="noopener" class="button-quiet">Tirar dúvidas pelo WhatsApp &rarr;</a>
+          </div>
+          <div class="hero-note" data-aos="fade-up" data-aos-delay="100">
+            <div class="hero-note-mark">!</div>
+            <div>
+              <strong>Vagas Limitadas para Produção</strong>
+              <span>Encomendas confirmadas mediante 50% de entrada.</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual" data-aos="zoom-in" data-aos-delay="150">
+          <div class="hero-orbit"></div>
+          <div class="hero-stamp">
+            <span>Artesanal & Exclusivo</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="announcement-wrap">
+      <div class="announcement">
+        <strong>Agenda de Natal Aberta</strong>
+        <span class="announcement-divider"></span>
+        <span>Garanta sua sobremesa com antecedência</span>
+        <span class="announcement-divider"></span>
+        <span>Retirada programada em Cotia</span>
+      </div>
+    </div>
+
+    <section id="catalogo" class="collection">
+      <div class="section-inner">
+        <div class="section-heading" data-aos="fade-up">
+          <span class="section-kicker">Nossas Delícias</span>
+          <h2>Destaques da Coleção</h2>
+          <p>Escolha a sobremesa perfeita para enfeitar a sua mesa e encantar sua família nesta data especial.</p>
+        </div>
+        <div class="product-grid">
+          <!-- Card Exemplo -->
+          <article class="product-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="product-number">01</div>
+            <div class="product-image-wrap">
+              <div class="w-full h-full flex items-center justify-center text-xs text-stone-500 font-serif">Foto do Produto</div>
+            </div>
+            <div class="product-content">
+              <div class="product-topline">
+                <div>
+                  <span class="product-category">Especial de Natal</span>
+                  <h3 class="product-title">Panetone Artesanal Recheado</h3>
+                </div>
+                <div class="product-price">
+                  <small>A partir de</small>
+                  R$ 95,00
+                </div>
+              </div>
+              <div class="serving">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                Serve de 6 a 8 pessoas
+              </div>
+              <div class="ingredients-label">Ingredientes Selecionados</div>
+              <p class="ingredients">Massa fermentada naturalmente, recheio cremoso artesanal e cobertura especial de chocolate nobre.</p>
+              <a href="https://wa.me/5511960324063?text=Olá!%20Gostaria%20de%20encomendar%20o%20Panetone%20Artesanal%20Recheado." target="_blank" rel="noopener" class="product-order">
+                Encomendar pelo WhatsApp
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="regras" class="order-section">
+      <div class="order-inner">
+        <div class="order-heading" data-aos="fade-up">
+          <span class="section-kicker">Informações Importantes</span>
+          <h2>Como funcionam as encomendas</h2>
+          <p>Para garantir a qualidade e o frescor de cada produto, seguimos um padrão rigoroso de atendimento e produção.</p>
+        </div>
+        <div class="rules-grid">
+          <div class="rule-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="rule-icon">1</div>
+            <h3>Sinal de 50%</h3>
+            <p>As encomendas são confirmadas mediante o pagamento de 50% de entrada via Pix. O restante é acertado na retirada.</p>
+          </div>
+          <div class="rule-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="rule-icon">2</div>
+            <h3>Prazos de Agenda</h3>
+            <p>Nossa produção é estritamente artesanal e limitada. As vagas podem ser encerradas assim que atingirmos o limite de segurança.</p>
+          </div>
+          <div class="rule-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="rule-icon">3</div>
+            <h3>Retirada Local</h3>
+            <p>As entregas e retiradas ocorrem em pontos programados na região de Cotia, com horários agendados antecipadamente.</p>
+          </div>
+        </div>
+        <div class="order-bottom" data-aos="fade-up">
+          <div>
+            <strong>Pronto para garantir sua sobremesa de Natal?</strong>
+            <p>Fale diretamente com nossa equipe pelo WhatsApp e faça seu pedido de forma rápida.</p>
+          </div>
+          <a href="https://wa.me/5511960324063" target="_blank" rel="noopener" class="button-primary">Fazer Encomenda Agora</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="brand-seal">M</div>
+        <div>
+          <strong>Mary Santos Confeitaria</strong>
+          <span>Cotia, São Paulo</span>
+        </div>
+      </div>
+      <div class="footer-note">
+        Feito com carinho para o seu Natal. <br>
+        Dúvidas? <a href="https://wa.me/5511960324063" target="_blank" rel="noopener">Chame no WhatsApp</a>.
+      </div>
+    </div>
+    <div class="footer-legal">
+      &copy; 2026 Mary Santos Confeitaria. Todos os direitos reservados.
+    </div>
+  </footer>
+
+  <!-- AOS Script com tratamento de falhas e fallback para garantir renderização em WebViews mobile -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    try {
+      if (typeof AOS !== 'undefined') {
+        AOS.init({
+          duration: 800,
+          once: true,
+          offset: 50
+        });
+      }
+    } catch (e) {
+      console.warn('AOS falhou ao carregar, aplicando fallback de visibilidade.', e);
+    }
+
+    // Toggle menu mobile simples
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    if (menuToggle && navLinks) {
+      menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('is-open');
+      });
+    }
+  </script>
+</body>
+</html>
