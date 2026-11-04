@@ -1,8 +1,27 @@
 <!doctype html>
-<html lang="pt-BR" class="aos-fallback">
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    /* Detecta o ambiente ANTES da primeira pintura e escolhe o nível de efeitos:
+       fx-lite = QUALQUER celular/tablet (toque), WebViews, economia de dados ou "reduzir movimento". fx-full = só desktop.
+       Teste manual: adicione ?fx=lite ou ?fx=full ao link. */
+    (function () {
+      var d = document.documentElement, ua = navigator.userAgent || "", q = location.search;
+      var android = /Android/i.test(ua);
+      var inApp = /; wv\)|FB_IAB|FBAN|FBAV|Instagram|WhatsApp|Line\/|Snapchat|TikTok|musical_ly|MicroMessenger/i.test(ua);
+      var cores = navigator.hardwareConcurrency || 4;
+      var save = !!(navigator.connection && navigator.connection.saveData);
+      var reduce = false, desktop = false;
+      try { reduce = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+      try { desktop = matchMedia("(hover: hover) and (pointer: fine)").matches; } catch (e) {}
+      var lite = reduce || save || android || inApp || !desktop || cores <= 2;
+      if (/[?&]fx=lite/.test(q)) lite = true;
+      if (/[?&]fx=full/.test(q)) lite = false;
+      d.className += (d.className ? " " : "") + "js " + (lite ? "fx-lite" : "fx-full");
+    })();
+  </script>
   <meta name="theme-color" content="#0a2f1d">
   <meta name="description" content="Catálogo de Natal Mary Santos Confeitaria. Sobremesas artesanais para celebrar, com encomendas confirmadas mediante 50% de entrada.">
   <meta property="og:title" content="Mary Santos Confeitaria — Catálogo de Natal">
@@ -10,16 +29,12 @@
   <meta property="og:type" content="website">
   <title>Mary Santos Confeitaria | Catálogo de Natal</title>
 
-  <!-- Tailwind CSS via CDN: útil para utilitários e ajustes rápidos sem build. -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
   <!-- Tipografia editorial: Playfair Display nos títulos e Inter nos textos. -->
+  <link rel="preload" as="image" href="img/brownie-travessa.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- AOS: animações suaves ao entrar na área visível. -->
-  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"></noscript>
 
   <style>
     :root {
@@ -264,11 +279,11 @@
     @keyframes hero-float { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-12px) rotate(1deg); } }
 
     /* Neve decorativa leve, sem canvas ou loops de JavaScript. */
-    .snow-layer { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; opacity: .23; }
+    .snow-layer { position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 0; overflow: hidden; pointer-events: none; opacity: .23; }
     .snow-layer::before, .snow-layer::after {
       content: "";
       position: absolute;
-      inset: -100% 0 0;
+      top: -100%; right: 0; bottom: 0; left: 0;
       background-image:
         radial-gradient(2px 2px at 12% 17%, #fff 98%, transparent),
         radial-gradient(1.5px 1.5px at 68% 26%, #fff 98%, transparent),
@@ -337,7 +352,7 @@
     .product-image-wrap::after {
       content: "";
       position: absolute;
-      inset: 12px;
+      top: 12px; right: 12px; bottom: 12px; left: 12px;
       border: 1px solid rgba(212,175,55,.22);
       pointer-events: none;
     }
@@ -461,7 +476,7 @@
 
     .focus-visible:focus-visible, a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
     /* Mantém todo o conteúdo visível se o JavaScript/CDN de animação não carregar. */
-    .aos-fallback [data-aos] { opacity: 1 !important; transform: none !important; }
+    
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
     @media (max-width: 980px) {
@@ -538,193 +553,1215 @@
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
       .snow-layer { display: none; }
     }
+
+
+    /* ================================================================
+       REFINAMENTO VISUAL — VITRINE E CATÁLOGO NATALINO
+       ================================================================ */
+    .hero-gallery {
+      position: relative;
+      display: block;
+      width: 100%;
+      min-height: 570px;
+      isolation: isolate;
+    }
+    .hero-gallery-glow {
+      position: absolute;
+      top: 7%; right: 8%; bottom: 6%; left: 8%;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(212,175,55,.17), rgba(212,175,55,.035) 48%, transparent 72%);
+      filter: blur(5px);
+    }
+    .holiday-photo {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(255,247,218,.58) 0 1px, transparent 3px),
+        radial-gradient(circle at 78% 15%, rgba(255,231,163,.45) 0 1.5px, transparent 4px),
+        radial-gradient(circle at 84% 52%, rgba(255,255,255,.22) 0 1px, transparent 3px),
+        radial-gradient(ellipse at 52% 59%, rgba(180,137,81,.31), transparent 57%),
+        linear-gradient(145deg, #16452e 0%, #0a2f1d 57%, #123b28 100%);
+    }
+    .holiday-photo::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      top: 0; right: 0; bottom: 0; left: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(137deg, transparent 0 75%, rgba(125,24,37,.94) 75.2% 100%),
+        linear-gradient(137deg, transparent 0 71.7%, rgba(212,175,55,.93) 71.9% 72.7%, transparent 72.9%),
+        linear-gradient(0deg, rgba(139,91,51,.82) 0%, rgba(174,128,77,.58) 9%, transparent 34%);
+      opacity: .92;
+    }
+    .holiday-photo::after {
+      content: "";
+      position: absolute;
+      z-index: 3;
+      top: 12px; right: 12px; bottom: 12px; left: 12px;
+      border: 1px solid rgba(230,195,104,.63);
+      box-shadow: inset 0 0 0 4px rgba(212,175,55,.055), 0 0 22px rgba(0,0,0,.08);
+      pointer-events: none;
+    }
+    .hero-photo-frame {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      padding: 15px;
+      border: 1px solid rgba(225,190,102,.74);
+      box-shadow: 0 22px 46px rgba(0,0,0,.28), 0 0 0 5px rgba(212,175,55,.055);
+      background-clip: padding-box;
+      transition: transform .55s cubic-bezier(.2,.75,.25,1), box-shadow .55s ease;
+    }
+    .hero-photo-frame:hover {
+      z-index: 5;
+      box-shadow: 0 28px 55px rgba(0,0,0,.34), 0 0 0 1px rgba(236,215,141,.55);
+    }
+    .hero-gallery-main {
+      z-index: 1;
+      top: 8%;
+      left: 21%;
+      width: 59%;
+      height: 78%;
+      border-radius: 46% 46% 12px 12px;
+      padding: 24px 19px 42px;
+      transform: rotate(-1.5deg);
+    }
+    .hero-gallery-main:hover { transform: rotate(0) translateY(-5px); }
+    .hero-gallery-main-img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 22px 18px rgba(0,0,0,.36));
+      animation: hero-float 7s ease-in-out infinite;
+    }
+    .hero-gallery-caption, .hero-tile-caption {
+      position: absolute;
+      z-index: 4;
+      left: 13px;
+      right: 13px;
+      bottom: 13px;
+      padding: 8px 10px;
+      color: #fff4d8;
+      background: rgba(7,34,21,.84);
+      border: 1px solid rgba(212,175,55,.45);
+      font: 500 .76rem var(--serif);
+      letter-spacing: .035em;
+      text-align: center;
+      backdrop-filter: blur(5px);
+    }
+    .hero-gallery-caption { bottom: 12px; font-size: .9rem; }
+    .hero-tile {
+      z-index: 2;
+      width: 25%;
+      height: 25%;
+      padding: 10px 10px 30px;
+      border-radius: 5px;
+    }
+    .hero-tile-img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 11px rgba(0,0,0,.35));
+    }
+    .hero-tile-caption {
+      left: 8px;
+      right: 8px;
+      bottom: 7px;
+      padding: 5px 4px;
+      font-size: .62rem;
+    }
+    .hero-tile-tl { top: 3%; left: 0; transform: rotate(-7deg); }
+    .hero-tile-tl:hover { transform: rotate(-2deg) translateY(-5px); }
+    .hero-tile-tr { top: 4%; right: 0; transform: rotate(7deg); }
+    .hero-tile-tr:hover { transform: rotate(2deg) translateY(-5px); }
+    .hero-tile-ml { bottom: 11%; left: -1%; transform: rotate(5deg); }
+    .hero-tile-ml:hover { transform: rotate(1deg) translateY(-5px); }
+    .hero-tile-mr { bottom: 10%; right: -1%; transform: rotate(-5deg); }
+    .hero-tile-mr:hover { transform: rotate(-1deg) translateY(-5px); }
+    .hero-tile-bottom { bottom: -1%; left: 39%; width: 23%; height: 22%; transform: rotate(2deg); }
+    .hero-tile-bottom:hover { transform: rotate(0) translateY(-5px); }
+    .hero-gallery-seal {
+      position: absolute;
+      z-index: 4;
+      right: 2%;
+      bottom: 1%;
+      width: 91px;
+      height: 91px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--gold-light);
+      outline: 1px solid rgba(212,175,55,.35);
+      outline-offset: 4px;
+      border-radius: 50%;
+      color: var(--gold-light);
+      background: rgba(8,39,24,.94);
+      text-align: center;
+      box-shadow: 0 12px 25px rgba(0,0,0,.24);
+      transform: rotate(8deg);
+    }
+    .hero-gallery-seal span { font: 500 .68rem/1.35 var(--serif); }
+    .hero-gallery-star { position: absolute; z-index: 4; color: var(--gold-light); text-shadow: 0 0 15px rgba(212,175,55,.45); }
+    .star-one { top: 2%; left: 43%; font-size: 1.7rem; }
+    .star-two { right: 14%; top: 42%; font-size: 1.2rem; }
+
+    /* Cabeçalho da coleção com linguagem editorial e selo da marca. */
+    .collection {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      padding: 122px 0 126px;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(212,175,55,.12), transparent 35%),
+        radial-gradient(circle at 0% 60%, rgba(10,47,29,.045), transparent 24%),
+        linear-gradient(180deg, #f8f5ed 0%, #f1eee5 100%);
+    }
+    .collection::before, .collection::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 430px;
+      height: 430px;
+      border: 1px solid rgba(166,132,49,.13);
+      border-radius: 50%;
+      box-shadow: 0 0 0 18px rgba(166,132,49,.025), 0 0 0 38px rgba(166,132,49,.018);
+      pointer-events: none;
+    }
+    .collection::before { top: 190px; left: -300px; }
+    .collection::after { right: -300px; bottom: 170px; }
+    .collection-heading {
+      max-width: 780px;
+      margin-bottom: 64px;
+    }
+    .collection-heading .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      padding: 9px 15px;
+      border: 1px solid rgba(166,132,49,.31);
+      border-radius: 999px;
+      color: #8e7028;
+      background: rgba(255,253,248,.73);
+      letter-spacing: .18em;
+    }
+    .collection-emblem {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      margin: 25px auto 17px;
+      border: 1px solid #b18b31;
+      outline: 1px solid rgba(177,139,49,.35);
+      outline-offset: 4px;
+      border-radius: 50%;
+      color: #a17d28;
+      background: #fbf8ef;
+      font: 500 1.75rem var(--serif);
+      box-shadow: 0 7px 20px rgba(10,47,29,.06);
+    }
+    .collection-heading h2 {
+      margin: 0 0 18px;
+      color: var(--pine);
+      font: 500 clamp(2.7rem, 5.2vw, 4.25rem)/1.05 var(--serif);
+      letter-spacing: -.045em;
+    }
+    .collection-heading h2 em { color: #9a792e; font-weight: 400; }
+    .collection-heading p {
+      max-width: 590px;
+      margin: 0 auto;
+      color: #69746c;
+      font-size: .91rem;
+      line-height: 1.9;
+    }
+    .collection-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 25px;
+      color: #8e7028;
+      font-size: .64rem;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .collection-meta i { width: 4px; height: 4px; border-radius: 50%; background: #b28b35; }
+    .product-grid { gap: 28px; }
+    .product-card {
+      overflow: hidden;
+      border: 1px solid rgba(142,112,40,.2);
+      border-radius: 11px;
+      background: #fffdf8;
+      box-shadow: 0 10px 28px rgba(25,38,28,.055);
+      transition: transform .5s cubic-bezier(.2,.75,.25,1), box-shadow .5s ease, border-color .35s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-9px);
+      border-color: rgba(177,139,49,.72);
+      box-shadow: 0 26px 56px rgba(25,38,28,.13), 0 0 0 3px rgba(212,175,55,.06);
+    }
+    .product-image-wrap {
+      height: 310px;
+      padding: 21px;
+      background-color: #0a2f1d;
+    }
+    .product-image-wrap::after { top: 13px; right: 13px; bottom: 13px; left: 13px; border-color: rgba(230,195,104,.66); }
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 17px 16px rgba(0,0,0,.3));
+      transition: transform .75s cubic-bezier(.2,.75,.25,1), filter .75s ease;
+    }
+    .product-card:hover .product-image { transform: scale(1.075) translateY(-2px); filter: drop-shadow(0 22px 18px rgba(0,0,0,.38)); }
+    .product-number {
+      top: 23px;
+      left: 24px;
+      padding: 6px 9px;
+      border: 1px solid rgba(225,190,102,.56);
+      color: #f3dfab;
+      background: rgba(7,34,21,.82);
+      font-size: .59rem;
+    }
+    .product-content { padding: 27px 26px 25px; }
+    .product-category { letter-spacing: .18em; }
+    .product-title { font-size: 1.55rem; }
+    .product-price { color: #0a2f1d; font-size: 1.32rem; }
+    .serving {
+      margin: 18px 0 18px;
+      border-color: rgba(177,139,49,.22);
+      border-radius: 999px;
+      color: #526157;
+      background: #f7f3e8;
+      padding: 8px 12px;
+    }
+    .ingredients { line-height: 1.85; }
+    .product-order {
+      min-height: 50px;
+      border-radius: 3px;
+      letter-spacing: .1em;
+    }
+    @media (max-width: 980px) {
+      .hero-gallery { min-height: 500px; }
+      .hero-gallery-main { left: 20%; width: 61%; }
+      .hero-tile { width: 26%; height: 24%; }
+      .hero-tile-bottom { width: 24%; height: 21%; }
+      .hero-gallery-seal { width: 80px; height: 80px; }
+      .product-image-wrap { height: 295px; }
+    }
+    @media (max-width: 720px) {
+      .hero-gallery { min-height: 430px; margin-top: 17px; }
+      .hero-gallery-main { top: 9%; left: 19%; width: 62%; height: 75%; padding: 17px 12px 35px; }
+      .hero-gallery-main-img { animation: none; }
+      .hero-tile { width: 28%; height: 25%; padding: 8px 7px 26px; }
+      .hero-tile-tl { top: 4%; left: -1%; }
+      .hero-tile-tr { top: 5%; right: -1%; }
+      .hero-tile-ml { bottom: 8%; left: -1%; }
+      .hero-tile-mr { bottom: 8%; right: -1%; }
+      .hero-tile-bottom { display: none; }
+      .hero-tile-caption { font-size: .53rem; }
+      .hero-gallery-caption { font-size: .75rem; }
+      .hero-gallery-seal { right: 3%; bottom: 0; width: 69px; height: 69px; }
+      .hero-gallery-seal span { font-size: .57rem; }
+      .star-one { top: 0; left: 46%; font-size: 1.2rem; }
+      .star-two { right: 13%; top: 43%; font-size: .95rem; }
+      .collection { padding: 88px 0 92px; }
+      .collection-heading { margin-bottom: 42px; }
+      .collection-emblem { width: 49px; height: 49px; margin: 21px auto 15px; font-size: 1.5rem; }
+      .collection-heading h2 { font-size: clamp(2.55rem, 11vw, 3.4rem); }
+      .collection-heading p { font-size: .83rem; }
+      .collection-meta { gap: 9px; font-size: .55rem; letter-spacing: .07em; }
+      .product-grid { gap: 22px; }
+      .product-image-wrap { height: 295px; padding: 18px; }
+      .product-content { padding: 23px 22px 22px; }
+    }
+    @media (max-width: 380px) {
+      .hero-gallery { min-height: 380px; }
+      .hero-gallery-main { width: 64%; left: 18%; }
+      .hero-tile { width: 29%; }
+      .product-image-wrap { height: 265px; }
+      .collection-meta { flex-wrap: wrap; }
+    }
+
+
+    /* NOVA VITRINE DA PÁGINA INICIAL — composição editorial em mosaico */
+    .hero-dessert-showcase {
+      display: block;
+      width: 100%;
+      min-height: 0;
+      height: 520px;
+      isolation: isolate;
+    }
+    .hero-dessert-grid {
+      position: relative;
+      display: grid;
+      width: 100%;
+      height: 100%;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      gap: 11px;
+    }
+    .hero-dessert-card {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      border: 1px solid rgba(230,195,104,.78);
+      border-radius: 8px;
+      box-shadow: 0 15px 32px rgba(0,0,0,.22), inset 0 0 0 4px rgba(212,175,55,.045);
+      transition: transform .45s cubic-bezier(.2,.75,.25,1), box-shadow .45s ease, border-color .3s ease;
+    }
+    .hero-dessert-card:hover {
+      z-index: 5;
+      transform: translateY(-5px);
+      border-color: var(--gold-light);
+      box-shadow: 0 24px 42px rgba(0,0,0,.3), 0 0 0 2px rgba(212,175,55,.12);
+    }
+    .hero-dessert-card::before {
+      background:
+        radial-gradient(circle at 50% 34%, rgba(255,247,218,.15), transparent 55%),
+        linear-gradient(0deg, rgba(3,25,15,.6), transparent 48%);
+      opacity: 1;
+    }
+    .hero-dessert-card::after { top: 8px; right: 8px; bottom: 8px; left: 8px; border-radius: 3px; }
+    .hero-dessert-card img {
+      position: absolute;
+      z-index: 1;
+      top: 11px; right: 10px; bottom: 31px; left: 10px;
+      width: calc(100% - 20px);
+      height: calc(100% - 42px);
+      object-fit: contain;
+      object-position: center;
+      filter: drop-shadow(0 13px 13px rgba(0,0,0,.38));
+      transition: transform .65s cubic-bezier(.2,.75,.25,1), filter .65s ease;
+    }
+    .hero-dessert-card:hover img {
+      transform: scale(1.055);
+      filter: drop-shadow(0 17px 17px rgba(0,0,0,.46));
+    }
+    .hero-dessert-caption {
+      position: absolute;
+      z-index: 4;
+      right: 8px;
+      bottom: 8px;
+      left: 8px;
+      overflow: hidden;
+      padding: 7px 6px;
+      border-top: 1px solid rgba(212,175,55,.44);
+      color: #fff5df;
+      background: rgba(5,31,19,.86);
+      font: 500 .72rem/1.25 var(--serif);
+      letter-spacing: .015em;
+      text-align: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      backdrop-filter: blur(6px);
+    }
+    .hero-dessert-feature {
+      grid-column: 1 / span 2;
+      grid-row: 1 / span 2;
+      border-radius: 12px;
+    }
+    .hero-dessert-feature img {
+      top: 18px; right: 17px; bottom: 48px; left: 17px;
+      width: calc(100% - 34px);
+      height: calc(100% - 66px);
+    }
+    .hero-dessert-feature .hero-dessert-caption {
+      right: 13px;
+      bottom: 12px;
+      left: 13px;
+      padding: 10px;
+      font-size: .96rem;
+      letter-spacing: .04em;
+    }
+    .hero-dessert-badge {
+      position: absolute;
+      z-index: 4;
+      top: 17px;
+      left: 17px;
+      padding: 7px 10px;
+      border: 1px solid rgba(236,215,141,.72);
+      border-radius: 999px;
+      color: #fff3d0;
+      background: rgba(7,38,23,.86);
+      font-size: .53rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      backdrop-filter: blur(6px);
+    }
+    .hero-dessert-uva { grid-column: 3; grid-row: 1; }
+    .hero-dessert-merengue { grid-column: 3; grid-row: 2; }
+    .hero-dessert-pave { grid-column: 1; grid-row: 3; }
+    .hero-dessert-guirlanda { grid-column: 2; grid-row: 3; }
+    .hero-dessert-panetone { grid-column: 3; grid-row: 3; }
+    .hero-dessert-panetone img { transform: scale(1.13); }
+    .hero-dessert-panetone:hover img { transform: scale(1.2); }
+    .hero-dessert-showcase .hero-gallery-seal {
+      right: -13px;
+      bottom: -17px;
+      width: 78px;
+      height: 78px;
+    }
+    .hero-dessert-showcase .hero-gallery-star { pointer-events: none; }
+
+    @media (max-width: 980px) {
+      .hero-dessert-showcase { height: 480px; }
+      .hero-dessert-grid { gap: 9px; }
+      .hero-dessert-caption { font-size: .64rem; }
+      .hero-dessert-feature .hero-dessert-caption { font-size: .86rem; }
+    }
+    @media (max-width: 720px) {
+      .hero-dessert-showcase {
+        width: 100%;
+        height: min(112vw, 490px);
+        min-height: 390px;
+        margin-top: 20px;
+      }
+      .hero-dessert-grid { gap: 8px; }
+      .hero-dessert-card { border-radius: 6px; }
+      .hero-dessert-card img { top: 8px; right: 7px; bottom: 28px; left: 7px; width: calc(100% - 14px); height: calc(100% - 36px); }
+      .hero-dessert-caption { right: 5px; bottom: 5px; left: 5px; padding: 6px 3px; font-size: .53rem; }
+      .hero-dessert-feature img { top: 14px; right: 12px; bottom: 39px; left: 12px; width: calc(100% - 24px); height: calc(100% - 53px); }
+      .hero-dessert-feature .hero-dessert-caption { right: 8px; bottom: 8px; left: 8px; padding: 8px 5px; font-size: .76rem; }
+      .hero-dessert-badge { top: 11px; left: 11px; padding: 5px 7px; font-size: .43rem; }
+      .hero-dessert-showcase .hero-gallery-seal { right: -5px; bottom: -13px; width: 65px; height: 65px; }
+      .hero-dessert-showcase .hero-gallery-seal span { font-size: .52rem; }
+      .hero-dessert-showcase .star-one { top: -13px; left: 48%; }
+      .hero-dessert-showcase .star-two { top: 43%; right: -1%; }
+    }
+    @media (max-width: 380px) {
+      .hero-dessert-showcase { height: 390px; min-height: 390px; }
+      .hero-dessert-grid { gap: 6px; }
+      .hero-dessert-caption { font-size: .47rem; }
+      .hero-dessert-feature .hero-dessert-caption { font-size: .68rem; }
+      .hero-dessert-badge { font-size: .39rem; }
+    }
+
+  
+    /* ================================================================
+       ANIMAÇÕES PROGRESSIVAS
+       Regra de ouro: TUDO é visível por padrão. O JS só esconde itens abaixo
+       da dobra (.rv-hide) e sempre os revela. Efeitos pesados só em html.fx-full.
+       ================================================================ */
+    .scroll-progress { position: fixed; z-index: 80; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg,#8a6d1f,#ecd78d,#d4af37); transform-origin: 0 50%; transform: scaleX(0); pointer-events: none; }
+    .site-header { transition: box-shadow .3s ease; }
+    .site-header.is-scrolled { box-shadow: 0 10px 30px rgba(0,0,0,.28); }
+    .nav-links a { position: relative; }
+    .nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .35s ease; }
+    .nav-links a:hover::after, .nav-links a.is-active::after { transform: scaleX(1); }
+    .nav-links a.is-active { color: var(--gold-light); }
+    .button-primary, .product-order, .header-cta { position: relative; overflow: hidden; }
+    /* Selo "M": centraliza no círculo (compensa a métrica da Playfair, que assenta a letra ~0.06em abaixo do centro) */
+    .brand-seal { display: flex; align-items: center; justify-content: center; flex: 0 0 auto; box-sizing: border-box; padding: 0 0 .12em; line-height: 1; text-align: center; }
+    .ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,.4); transform: scale(0); animation: ripple .7s ease-out forwards; pointer-events: none; }
+    @keyframes ripple { to { transform: scale(1); opacity: 0; } }
+    .spark { position: fixed; z-index: 9999; pointer-events: none; color: #ecd78d; line-height: 1; }
+
+    /* Hero: entrada só com CSS (sem JS). "backwards" = se a animação falhar, o conteúdo já está visível. */
+    .hero-copy { animation: fadeUp .9s ease backwards; }
+    .hero-visual { animation: fadeLeft 1s ease .15s backwards; }
+    .hero-dessert-card { animation: popIn .85s cubic-bezier(.2,.8,.2,1) backwards; animation-delay: calc(var(--i, 0) * 110ms + 250ms); }
+    @keyframes fadeUp { from { opacity: 0; transform: translate3d(0,24px,0); } }
+    @keyframes fadeLeft { from { opacity: 0; transform: translate3d(30px,0,0); } }
+    @keyframes fadeOnly { from { opacity: 0; } }
+    @keyframes popIn { from { opacity: 0; transform: translateY(26px) scale(.92); } }
+    @keyframes twinkle { 0%,100% { opacity: .35; transform: scale(.85) rotate(0); } 50% { opacity: 1; transform: scale(1.15) rotate(20deg); } }
+    @keyframes sealFloat { 50% { translate: 0 -7px; } }
+    html.fx-full .hero-dessert-grid { transition: transform .45s ease-out; }
+    html.fx-full .hero-gallery-star { animation: twinkle 3.2s ease-in-out infinite; }
+    html.fx-full .star-two { animation-delay: 1.4s; }
+    html.fx-full .hero-gallery-seal { animation: sealFloat 6s ease-in-out infinite; }
+
+    /* ===== Coleção: fundo de Natal (estático por padrão) ===== */
+    .collection {
+      padding-top: 156px; color: #fff9e9;
+      background:
+        radial-gradient(ellipse 70% 38% at 50% 0%, rgba(212,175,55,.17), transparent 70%),
+        radial-gradient(ellipse 60% 48% at 8% 68%, rgba(34,104,68,.5), transparent 65%),
+        radial-gradient(ellipse 60% 48% at 94% 36%, rgba(140,30,45,.26), transparent 65%),
+        linear-gradient(45deg, rgba(212,175,55,.05) 1px, transparent 1px),
+        linear-gradient(-45deg, rgba(212,175,55,.05) 1px, transparent 1px),
+        linear-gradient(180deg, #0b3422 0%, #0a2f1d 48%, #082818 100%);
+      background-color: #0a2f1d;
+      background-size: auto, auto, auto, 58px 58px, 58px 58px, auto;
+    }
+    .collection::before, .collection::after { border-color: rgba(212,175,55,.16); }
+    .collection .section-inner { position: relative; z-index: 3; }
+    .collection-fx { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+    html.fx-full .collection-fx { display: block; }
+    .bokeh { position: absolute; z-index: 0; border-radius: 50%; pointer-events: none; }
+    .b1 { width: 340px; height: 340px; left: -90px; top: 26%; background: radial-gradient(circle, rgba(212,175,55,.22), transparent 68%); }
+    .b2 { width: 430px; height: 430px; right: -120px; top: 50%; background: radial-gradient(circle, rgba(200,50,60,.17), transparent 68%); }
+    .b3 { width: 270px; height: 270px; left: 42%; bottom: 5%; background: radial-gradient(circle, rgba(236,215,141,.15), transparent 70%); }
+    html.fx-full .bokeh { transform: translate3d(0, calc(var(--p, 0) * -90px), 0); animation: drift 16s ease-in-out infinite alternate; }
+    @keyframes drift { from { translate: 0 0; } to { translate: 32px -26px; } }
+
+    .garland { position: absolute; z-index: 2; top: 0; left: 0; right: 0; pointer-events: none; }
+    .garland svg { display: block; }
+    .bulb .halo { fill: var(--c); opacity: .22; }
+    .bulb .glass { fill: var(--c); opacity: .92; }
+    html.fx-full .collection.is-live .garland { animation: garlandIn 1.2s cubic-bezier(.2,.8,.2,1) backwards; }
+    html.fx-full .bulb .halo { animation: bulbHalo 2.8s ease-in-out infinite; animation-delay: var(--d); animation-play-state: paused; }
+    html.fx-full .bulb .glass { animation: bulbGlass 2.8s ease-in-out infinite; animation-delay: var(--d); animation-play-state: paused; }
+    html.fx-full .collection.is-live .bulb .halo, html.fx-full .collection.is-live .bulb .glass { animation-play-state: running; }
+    @keyframes garlandIn { from { opacity: 0; transform: translateY(-40px); } }
+    @keyframes bulbHalo { 0%,100% { opacity: .1; } 50% { opacity: .42; } }
+    @keyframes bulbGlass { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+
+    .collection-heading .section-kicker { color: #ecd78d; border-color: rgba(236,215,141,.4); background: rgba(255,255,255,.05); }
+    .collection-emblem { color: #ecd78d; border-color: #d4af37; outline-color: rgba(212,175,55,.4); background: #0d3a26; }
+    html.fx-full .collection-emblem { animation: emblemGlow 4s ease-in-out infinite; }
+    @keyframes emblemGlow { 0%,100% { box-shadow: 0 0 14px rgba(212,175,55,.2); } 50% { box-shadow: 0 0 36px rgba(212,175,55,.5); } }
+    .collection-heading h2 { color: #fff8e8; }
+    .collection-heading h2 em { color: #e6c35c; }
+    html.fx-full .collection-heading h2 em { color: transparent; background: linear-gradient(100deg,#d4af37 20%,#fff1b8 45%,#d4af37 70%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; animation: shimmer 5s linear infinite; }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+    .collection-heading p { color: rgba(255,249,233,.74); }
+    .collection-meta { color: #ecd78d; }
+    .collection-meta i { background: #d4af37; }
+    .order-section { border-top: 1px solid rgba(212,175,55,.3); }
+
+    .product-card { border-color: rgba(236,215,141,.3); box-shadow: 0 20px 44px rgba(0,0,0,.3); }
+    .rule-card { transition: transform .4s ease, border-color .4s ease, background .4s ease; }
+    .rule-icon { transition: transform .7s ease; }
+    @media (hover: hover) and (pointer: fine) {
+      .rule-card:hover { transform: translateY(-6px); border-color: rgba(212,175,55,.7); background: rgba(255,255,255,.07); }
+      .rule-card:hover .rule-icon { transform: rotate(360deg) scale(1.08); }
+      html.fx-full .product-card { transform: perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)); transition: transform .25s ease-out, box-shadow .5s ease, border-color .35s ease; }
+      html.fx-full .product-card:hover { border-color: rgba(236,215,141,.7); transform: perspective(900px) translateY(-9px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)); box-shadow: 0 30px 60px rgba(0,0,0,.42), 0 0 40px rgba(212,175,55,.2); }
+      html.fx-full .product-card::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 5; pointer-events: none; opacity: 0; transition: opacity .4s ease; background: radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(255,236,170,.3), transparent 45%); }
+      html.fx-full .product-card:hover::after { opacity: 1; }
+    }
+    html.fx-full .product-card.is-in .product-image { animation: imgIn 1.2s cubic-bezier(.2,.75,.25,1) .15s backwards; }
+    @keyframes imgIn { from { opacity: 0; transform: scale(1.18) translateY(14px); } }
+    
+    
+    @media (max-width: 720px) {
+      .collection { padding-top: 124px; }
+      .nav-links a::after { display: none; }
+      .b1, .b2 { width: 240px; height: 240px; }
+    }
+    
+
+    /* ===== Reveal ao rolar (progressivo). Estes seletores vêm DEPOIS dos estados de card para vencer o tilt. ===== */
+    html [data-reveal].rv-hide { opacity: 0; transform: translate3d(0,26px,0); }
+    html [data-reveal="left"].rv-hide { transform: translate3d(34px,0,0); }
+    html [data-reveal].rv-anim { transition: opacity .75s ease, transform .75s cubic-bezier(.2,.8,.2,1); }
+    html.fx-lite [data-reveal].rv-hide { transform: none; }
+    html.fx-lite [data-reveal].rv-anim { transition: opacity .5s ease; }
+
+    /* ================================================================
+       MODO LEVE (fx-lite): Android WebView / aparelhos modestos.
+       Sem blur, sem filtros, sem animações infinitas pesadas; fundos sólidos.
+       ================================================================ */
+    html.fx-lite *, html.fx-lite *::before, html.fx-lite *::after { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; filter: none !important; will-change: auto !important; }
+    html.fx-lite .hero-copy, html.fx-lite .hero-visual { animation: fadeOnly .6s ease backwards; }
+    html.fx-lite .hero-dessert-card { animation: none; }
+    html.fx-lite .product-card { box-shadow: 0 8px 18px rgba(0,0,0,.28); }
+    html.fx-lite .snow-layer::after { display: none; }
+    html.fx-lite .site-header { background: #082718; }
+    html.fx-lite .hero-note { background: #0d3a26; }
+    html.fx-lite .hero-gallery-caption, html.fx-lite .hero-tile-caption { background: #072215; }
+    html.fx-lite .hero-dessert-caption { background: #051f13; }
+    html.fx-lite .hero-dessert-badge { background: #072617; }
+    /* ===== Modo leve (todo celular): zero animação/transição, fundos simples, sombras curtas ===== */
+    html.fx-lite *, html.fx-lite *::before, html.fx-lite *::after { animation: none !important; transition: none !important; }
+    html.fx-lite .scroll-progress, html.fx-lite .snow-layer, html.fx-lite .bokeh, html.fx-lite .bulb .halo { display: none !important; }
+    html.fx-lite .collection { background: linear-gradient(180deg, #0b3422 0%, #0a2f1d 55%, #082818 100%); }
+    html.fx-lite .collection::before, html.fx-lite .collection::after { display: none; }
+    html.fx-lite .product-card, html.fx-lite .product-card:hover { transform: none; box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+    html.fx-lite .product-image, html.fx-lite .product-card:hover .product-image { transform: none; }
+    /* Navegadores sem backdrop-filter (WebViews antigas): mesmo fundo sólido */
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      .site-header { background: #082718; }
+      .hero-note { background: #0d3a26; }
+      .hero-gallery-caption, .hero-tile-caption { background: #072215; }
+      .hero-dessert-caption { background: #051f13; }
+      .hero-dessert-badge { background: #072617; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .collection-fx { display: none !important; }
+      .product-card, .product-card:hover { transform: none !important; }
+    }
+    html.fx-lite .hero-product,
+    html.fx-lite .snow-layer::after,
+    html.fx-lite .hero-gallery-main-img { animation: none !important; }
   </style>
 </head>
-<body class="bg-[#f7f4ed] text-[#1c2821]">
+<body>
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <!-- Link de acessibilidade para pular diretamente ao conteúdo principal. -->
+  <a href="#conteudo" class="sr-only">Pular para o conteúdo</a>
+
+  <!-- Cabeçalho com navegação compacta e menu mobile. -->
   <header class="site-header">
     <div class="header-inner">
-      <a href="#" class="brand">
-        <div class="brand-seal">M</div>
-        <div>
+      <a class="brand" href="#inicio" aria-label="Mary Santos Confeitaria - início">
+        <span class="brand-seal" aria-hidden="true">M</span>
+        <span>
           <span class="brand-name">Mary Santos</span>
-          <span class="brand-caption">Confeitaria Artesanal</span>
-        </div>
+          <span class="brand-caption">Confeitaria artesanal</span>
+        </span>
       </a>
-      <nav class="nav-links">
-        <a href="#catalogo">Catálogo</a>
-        <a href="#encomendas">Como Encomendar</a>
-        <a href="#regras">Regras e Prazos</a>
+
+      <nav class="nav-links" id="site-nav" aria-label="Navegação principal">
+        <a href="#inicio">Início</a>
+        <a href="#colecao">Catálogo</a>
+        <a href="#encomendas">Como encomendar</a>
       </nav>
-      <a href="https://wa.me/5511960324063" target="_blank" rel="noopener" class="header-cta">
-        Falar no WhatsApp
+
+      <a class="header-cta" href="#colecao">
+        Explorar catálogo
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <button class="menu-toggle" aria-label="Abrir menu">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
+      <button class="menu-toggle" type="button" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="site-nav">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       </button>
     </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="snow-layer"></div>
+  <main id="conteudo">
+    <!-- Hero principal: apresentação da marca, chamada para o catálogo e aviso de entrada. -->
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="snow-layer" aria-hidden="true"></div>
       <div class="hero-inner">
-        <div class="hero-copy" data-aos="fade-up">
-          <span class="eyebrow">Coleção de Natal 2026</span>
-          <h1>Sobremesas artesanais para <em>celebrar</em> com quem você ama.</h1>
-          <p class="hero-description">
-            Transforme sua ceia em um momento inesquecível com receitas exclusivas, ingredientes selecionados e o toque artesanal da Mary Santos.
-          </p>
+        <div class="hero-copy">
+          <span class="eyebrow">Coleção especial · Natal</span>
+          <h1 id="hero-title">Catálogo de Natal: sobremesas especiais para <em>celebrar.</em></h1>
+          <p class="hero-description">Sobremesas artesanais preparadas para deixar seus encontros ainda mais especiais. Escolha seu doce favorito e celebre cada momento com a Mary Santos Confeitaria.</p>
           <div class="hero-actions">
-            <a href="#catalogo" class="button-primary">Ver Catálogo de Natal</a>
-            <a href="https://wa.me/5511960324063" target="_blank" rel="noopener" class="button-quiet">Tirar dúvidas pelo WhatsApp &rarr;</a>
+            <a class="button-primary" href="#colecao">
+              Conhecer sobremesas
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="button-quiet" href="#encomendas">Como funciona a encomenda <span aria-hidden="true">↗</span></a>
           </div>
-          <div class="hero-note" data-aos="fade-up" data-aos-delay="100">
-            <div class="hero-note-mark">!</div>
-            <div>
-              <strong>Vagas Limitadas para Produção</strong>
-              <span>Encomendas confirmadas mediante 50% de entrada.</span>
-            </div>
+          <div class="hero-note">
+            <span class="hero-note-mark" aria-hidden="true">M</span>
+            <span><strong>Encomendas com 50% de entrada</strong><span>Garanta sua sobremesa para a celebração.</span></span>
           </div>
         </div>
-        <div class="hero-visual" data-aos="zoom-in" data-aos-delay="150">
-          <div class="hero-orbit"></div>
-          <div class="hero-stamp">
-            <span>Artesanal & Exclusivo</span>
+
+        <div class="hero-visual hero-dessert-showcase" aria-label="Vitrine editorial com as seis sobremesas da coleção de Natal">
+          <div class="hero-dessert-grid">
+          <div class="hero-dessert-card holiday-photo hero-dessert-feature">
+            <img fetchpriority="high" width="660" height="450" src="img/brownie-travessa.webp" alt="Brownie na travessa com brigadeiro e morangos" fetchpriority="high">
+            <span class="hero-dessert-badge">Destaque da coleção</span>
+            <span class="hero-dessert-caption">Brownie na Travessa</span>
           </div>
+          <div class="hero-dessert-card holiday-photo hero-dessert-uva">
+            <img width="660" height="545" src="img/bombom-uva.webp" alt="Bombom de uva com cobertura de chocolate" decoding="async">
+            
+            <span class="hero-dessert-caption">Bombom de Uva</span>
+          </div>
+          <div class="hero-dessert-card holiday-photo hero-dessert-merengue">
+            <img width="660" height="430" src="img/merengue-morango.webp" alt="Merengue de morango com creme e suspiros" decoding="async">
+            
+            <span class="hero-dessert-caption">Merengue de Morango</span>
+          </div>
+          <div class="hero-dessert-card holiday-photo hero-dessert-pave">
+            <img width="660" height="459" src="img/pave-pessego.webp" alt="Pavê de pêssego com creme e raspas brancas" decoding="async">
+            
+            <span class="hero-dessert-caption">Pavê de Pêssego</span>
+          </div>
+          <div class="hero-dessert-card holiday-photo hero-dessert-guirlanda">
+            <img width="660" height="603" src="img/guirlanda-brownie.webp" alt="Guirlanda de brownie decorada com frutas vermelhas e morangos" decoding="async">
+            
+            <span class="hero-dessert-caption">Guirlanda de Brownie</span>
+          </div>
+          <div class="hero-dessert-card holiday-photo hero-dessert-panetone">
+            <img width="423" height="660" src="img/panetone-trufado.webp" alt="Panetone trufado recheado com cobertura de chocolate" decoding="async">
+            
+            <span class="hero-dessert-caption">Panetone Trufado</span>
+          </div>
+          </div>
+          <div class="hero-gallery-seal" aria-hidden="true"><span>Uma coleção<br>feita para<br>celebrar</span></div>
+          <span class="hero-gallery-star star-one" aria-hidden="true">✦</span>
+          <span class="hero-gallery-star star-two" aria-hidden="true">✧</span>
         </div>
       </div>
     </section>
 
-    <div class="announcement-wrap">
+    <!-- Faixa de destaque da condição de pagamento. -->
+    <div class="announcement-wrap" role="note" aria-label="Condição de encomenda">
       <div class="announcement">
-        <strong>Agenda de Natal Aberta</strong>
-        <span class="announcement-divider"></span>
-        <span>Garanta sua sobremesa com antecedência</span>
-        <span class="announcement-divider"></span>
-        <span>Retirada programada em Cotia</span>
+        <strong>Seu Natal merece um doce especial.</strong>
+        <span class="announcement-divider" aria-hidden="true"></span>
+        <span>Encomendas confirmadas com 50% de entrada.</span>
       </div>
     </div>
 
-    <section id="catalogo" class="collection">
+    <!-- Coleção editorial com fotografias originais e cenário natalino inspirado no catálogo enviado. -->
+    <section class="collection" id="colecao" aria-labelledby="collection-title">
+      <canvas class="collection-fx" aria-hidden="true"></canvas>
+      <span class="bokeh b1" aria-hidden="true"></span><span class="bokeh b2" aria-hidden="true"></span><span class="bokeh b3" aria-hidden="true"></span>
+      <div class="garland" aria-hidden="true"></div>
       <div class="section-inner">
-        <div class="section-heading" data-aos="fade-up">
-          <span class="section-kicker">Nossas Delícias</span>
-          <h2>Destaques da Coleção</h2>
-          <p>Escolha a sobremesa perfeita para enfeitar a sua mesa e encantar sua família nesta data especial.</p>
+        <div class="section-heading collection-heading" data-reveal="up">
+          <span class="section-kicker">A magia mora nos detalhes</span>
+          <div class="collection-emblem" aria-hidden="true"><span>M</span></div>
+          <h2 id="collection-title">Uma mesa cheia de<br><em>encanto e sabor.</em></h2>
+          <p>Receitas artesanais preparadas para transformar encontros em lembranças. Escolha suas favoritas e deixe a magia do Natal por nossa conta.</p>
+          <div class="collection-meta"><span>✦ 06 delícias especiais</span><i aria-hidden="true"></i><span>Feitas para compartilhar</span></div>
         </div>
+
         <div class="product-grid">
-          <!-- Card Exemplo -->
-          <article class="product-card" data-aos="fade-up" data-aos-delay="100">
-            <div class="product-number">01</div>
-            <div class="product-image-wrap">
-              <div class="w-full h-full flex items-center justify-center text-xs text-stone-500 font-serif">Foto do Produto</div>
+          <!-- Produto 01 -->
+          <article class="product-card" data-reveal="up" data-delay="0">
+            <div class="product-image-wrap holiday-photo">
+              <span class="product-number">01 / 06</span>
+              <img width="660" height="545" class="product-image" src="img/bombom-uva.webp" alt="Bombom de uva com cobertura de chocolate" decoding="async">
             </div>
             <div class="product-content">
               <div class="product-topline">
-                <div>
-                  <span class="product-category">Especial de Natal</span>
-                  <h3 class="product-title">Panetone Artesanal Recheado</h3>
-                </div>
-                <div class="product-price">
-                  <small>A partir de</small>
-                  R$ 95,00
-                </div>
+                <div><span class="product-category">Sobremesa artesanal</span><h3 class="product-title">Bombom de Uva</h3></div>
+                <div class="product-price"><small>Valor</small>R$ 145,00</div>
               </div>
-              <div class="serving">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                Serve de 6 a 8 pessoas
+              <span class="serving"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 20v-1.5a4.5 4.5 0 0 0-4.5-4.5h-4A4.5 4.5 0 0 0 3 18.5V20m6.5-9a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8-7.5a4 4 0 0 1 0 7.75M21 20v-1.5a4.5 4.5 0 0 0-3.5-4.38" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Serve de 10 a 12 pessoas</span>
+              <span class="ingredients-label">Ingredientes</span>
+              <p class="ingredients">Uva sem semente, brigadeiro branco e ganache de chocolate.</p>
+              <a class="product-order" href="#contato" data-whatsapp-product="Bombom de Uva">Encomendar via WhatsApp <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Produto 02 -->
+          <article class="product-card" data-reveal="up" data-delay="80">
+            <div class="product-image-wrap holiday-photo">
+              <span class="product-number">02 / 06</span>
+              <img width="660" height="430" class="product-image" src="img/merengue-morango.webp" alt="Merengue de morango com creme e suspiros" decoding="async">
+            </div>
+            <div class="product-content">
+              <div class="product-topline">
+                <div><span class="product-category">Sobremesa artesanal</span><h3 class="product-title">Merengue de Morango</h3></div>
+                <div class="product-price"><small>Valor</small>R$ 145,00</div>
               </div>
-              <div class="ingredients-label">Ingredientes Selecionados</div>
-              <p class="ingredients">Massa fermentada naturalmente, recheio cremoso artesanal e cobertura especial de chocolate nobre.</p>
-              <a href="https://wa.me/5511960324063?text=Olá!%20Gostaria%20de%20encomendar%20o%20Panetone%20Artesanal%20Recheado." target="_blank" rel="noopener" class="product-order">
-                Encomendar pelo WhatsApp
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-              </a>
+              <span class="serving"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 20v-1.5a4.5 4.5 0 0 0-4.5-4.5h-4A4.5 4.5 0 0 0 3 18.5V20m6.5-9a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8-7.5a4 4 0 0 1 0 7.75M21 20v-1.5a4.5 4.5 0 0 0-3.5-4.38" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Serve de 10 a 12 pessoas</span>
+              <span class="ingredients-label">Ingredientes</span>
+              <p class="ingredients">Brigadeiro branco, creme belga, morango e suspiros.</p>
+              <a class="product-order" href="#contato" data-whatsapp-product="Merengue de Morango">Encomendar via WhatsApp <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Produto 03 -->
+          <article class="product-card" data-reveal="up" data-delay="160">
+            <div class="product-image-wrap holiday-photo">
+              <span class="product-number">03 / 06</span>
+              <img width="660" height="459" class="product-image" src="img/pave-pessego.webp" alt="Pavê de pêssego com creme e raspas brancas" decoding="async">
+            </div>
+            <div class="product-content">
+              <div class="product-topline">
+                <div><span class="product-category">Sobremesa artesanal</span><h3 class="product-title">Pavê de Pêssego</h3></div>
+                <div class="product-price"><small>Valor</small>R$ 145,00</div>
+              </div>
+              <span class="serving"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 20v-1.5a4.5 4.5 0 0 0-4.5-4.5h-4A4.5 4.5 0 0 0 3 18.5V20m6.5-9a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8-7.5a4 4 0 0 1 0 7.75M21 20v-1.5a4.5 4.5 0 0 0-3.5-4.38" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Serve de 10 a 12 pessoas</span>
+              <span class="ingredients-label">Ingredientes</span>
+              <p class="ingredients">Biscoito champanhe, creme belga e pêssego.</p>
+              <a class="product-order" href="#contato" data-whatsapp-product="Pavê de Pêssego">Encomendar via WhatsApp <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Produto 04 -->
+          <article class="product-card" data-reveal="up" data-delay="0">
+            <div class="product-image-wrap holiday-photo">
+              <span class="product-number">04 / 06</span>
+              <img width="660" height="450" class="product-image" src="img/brownie-travessa.webp" alt="Brownie na travessa com brigadeiro e morangos" decoding="async">
+            </div>
+            <div class="product-content">
+              <div class="product-topline">
+                <div><span class="product-category">Sobremesa artesanal</span><h3 class="product-title">Brownie na Travessa com Morango</h3></div>
+                <div class="product-price"><small>Valor</small>R$ 180,00</div>
+              </div>
+              <span class="serving"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 20v-1.5a4.5 4.5 0 0 0-4.5-4.5h-4A4.5 4.5 0 0 0 3 18.5V20m6.5-9a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8-7.5a4 4 0 0 1 0 7.75M21 20v-1.5a4.5 4.5 0 0 0-3.5-4.38" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Serve de 10 a 12 pessoas</span>
+              <span class="ingredients-label">Ingredientes</span>
+              <p class="ingredients">Brownie, brigadeiro tradicional, brigadeiro branco, ganache de chocolate e morango.</p>
+              <a class="product-order" href="#contato" data-whatsapp-product="Brownie na Travessa com Morango">Encomendar via WhatsApp <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Produto 05 -->
+          <article class="product-card" data-reveal="up" data-delay="80">
+            <div class="product-image-wrap holiday-photo">
+              <span class="product-number">05 / 06</span>
+              <img width="660" height="603" class="product-image" src="img/guirlanda-brownie.webp" alt="Guirlanda de brownie decorada com frutas vermelhas e morangos" decoding="async">
+            </div>
+            <div class="product-content">
+              <div class="product-topline">
+                <div><span class="product-category">Edição especial</span><h3 class="product-title">Guirlanda de Brownie</h3></div>
+                <div class="product-price"><small>Valor</small>R$ 150,00</div>
+              </div>
+              <span class="serving"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 20v-1.5a4.5 4.5 0 0 0-4.5-4.5h-4A4.5 4.5 0 0 0 3 18.5V20m6.5-9a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8-7.5a4 4 0 0 1 0 7.75M21 20v-1.5a4.5 4.5 0 0 0-3.5-4.38" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Serve de 10 a 12 pessoas</span>
+              <span class="ingredients-label">Ingredientes</span>
+              <p class="ingredients">Brownie, brigadeiro tradicional, brigadeiro branco, ganache e morango. Decorada em formato de guirlanda natalina.</p>
+              <a class="product-order" href="#contato" data-whatsapp-product="Guirlanda de Brownie">Encomendar via WhatsApp <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Produto 06: o catálogo informa peso aproximado e não detalha o recheio. -->
+          <article class="product-card" data-reveal="up" data-delay="160">
+            <div class="product-image-wrap holiday-photo">
+              <span class="product-number">06 / 06</span>
+              <img width="423" height="660" class="product-image" src="img/panetone-trufado.webp" alt="Panetone trufado recheado com cobertura de chocolate" decoding="async">
+            </div>
+            <div class="product-content">
+              <div class="product-topline">
+                <div><span class="product-category">Edição especial</span><h3 class="product-title">Panetone Trufado</h3></div>
+                <div class="product-price"><small>Valor</small>R$ 90,00</div>
+              </div>
+              <span class="serving"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v18m-7-7 7 7 7-7M5 6h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>700 g aproximadamente</span>
+              <span class="ingredients-label">Descrição</span>
+              <p class="ingredients">Panetone recheado. O catálogo não especifica os ingredientes do recheio.</p>
+              <a class="product-order" href="#contato" data-whatsapp-product="Panetone Trufado">Encomendar via WhatsApp <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="regras" class="order-section">
+    <!-- Informações operacionais sem inventar datas ou prazos não informados. -->
+    <section class="order-section" id="encomendas" aria-labelledby="order-title">
       <div class="order-inner">
-        <div class="order-heading" data-aos="fade-up">
-          <span class="section-kicker">Informações Importantes</span>
-          <h2>Como funcionam as encomendas</h2>
-          <p>Para garantir a qualidade e o frescor de cada produto, seguimos um padrão rigoroso de atendimento e produção.</p>
+        <div class="order-heading" data-reveal="up">
+          <span class="section-kicker">Um pedido simples, uma celebração especial</span>
+          <h2 id="order-title">Vamos preparar seu Natal?</h2>
+          <p>Escolha sua sobremesa e fale com a Mary Santos Confeitaria para confirmar disponibilidade, prazo e detalhes de retirada ou entrega.</p>
         </div>
+
         <div class="rules-grid">
-          <div class="rule-card" data-aos="fade-up" data-aos-delay="100">
-            <div class="rule-icon">1</div>
-            <h3>Sinal de 50%</h3>
-            <p>As encomendas são confirmadas mediante o pagamento de 50% de entrada via Pix. O restante é acertado na retirada.</p>
-          </div>
-          <div class="rule-card" data-aos="fade-up" data-aos-delay="200">
-            <div class="rule-icon">2</div>
-            <h3>Prazos de Agenda</h3>
-            <p>Nossa produção é estritamente artesanal e limitada. As vagas podem ser encerradas assim que atingirmos o limite de segurança.</p>
-          </div>
-          <div class="rule-card" data-aos="fade-up" data-aos-delay="300">
-            <div class="rule-icon">3</div>
-            <h3>Retirada Local</h3>
-            <p>As entregas e retiradas ocorrem em pontos programados na região de Cotia, com horários agendados antecipadamente.</p>
-          </div>
+          <article class="rule-card" data-reveal="up" data-delay="0">
+            <span class="rule-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2.8v18.4M16.5 7.2c0-1.65-1.8-2.7-4.5-2.7s-4.5 1.05-4.5 2.7 1.55 2.65 4.5 3.15 4.5 1.55 4.5 3.25-1.8 3-4.5 3-4.5-1.3-4.5-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+            <h3>50% de entrada</h3>
+            <p>Para confirmar a encomenda, é necessário o pagamento de 50% do valor total. Combine a forma de pagamento diretamente pelo WhatsApp.</p>
+          </article>
+          <article class="rule-card" data-reveal="up" data-delay="100">
+            <span class="rule-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7.5 3v4M16.5 3v4M3.5 9.5h17M8 13h3m-3 4h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+            <h3>Prazo e disponibilidade</h3>
+            <p>Consulte a agenda antes de fazer o pedido. O prazo de produção e a disponibilidade da data serão confirmados no atendimento.</p>
+          </article>
+          <article class="rule-card" data-reveal="up" data-delay="200">
+            <span class="rule-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 11.2a7.5 7.5 0 0 1-11.1 6.6L4 19l1.2-4.6A7.5 7.5 0 1 1 20 11.2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.4 8.5c.4 2.5 2.2 4.3 4.8 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+            <h3>Atendimento direto</h3>
+            <p>Informe o produto desejado e converse sobre retirada ou entrega, pagamento do restante e demais detalhes da sua encomenda.</p>
+          </article>
         </div>
-        <div class="order-bottom" data-aos="fade-up">
+
+        <div class="order-bottom" data-reveal="up">
           <div>
-            <strong>Pronto para garantir sua sobremesa de Natal?</strong>
-            <p>Fale diretamente com nossa equipe pelo WhatsApp e faça seu pedido de forma rápida.</p>
+            <strong>Já escolheu sua sobremesa?</strong>
+            <p>Envie uma mensagem para consultar a disponibilidade e concluir sua encomenda.</p>
           </div>
-          <a href="https://wa.me/5511960324063" target="_blank" rel="noopener" class="button-primary">Fazer Encomenda Agora</a>
+          <a class="button-primary" href="#contato" data-whatsapp-general>
+            Falar pelo WhatsApp
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11.2a7.5 7.5 0 0 1-11.1 6.6L4 19l1.2-4.6A7.5 7.5 0 1 1 20 11.2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.4 8.5c.4 2.5 2.2 4.3 4.8 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </a>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
+  <!-- Contato e rodapé. O número é configurado uma única vez no JavaScript abaixo. -->
+  <footer class="site-footer" id="contato">
     <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="brand-seal">M</div>
-        <div>
-          <strong>Mary Santos Confeitaria</strong>
-          <span>Cotia, São Paulo</span>
-        </div>
-      </div>
+      <a class="footer-brand" href="#inicio" aria-label="Voltar ao início">
+        <span class="brand-seal" aria-hidden="true">M</span>
+        <span><strong>Mary Santos</strong><span>Confeitaria artesanal</span></span>
+      </a>
       <div class="footer-note">
-        Feito com carinho para o seu Natal. <br>
-        Dúvidas? <a href="https://wa.me/5511960324063" target="_blank" rel="noopener">Chame no WhatsApp</a>.
+        <div>Encomendas e informações pelo WhatsApp.</div>
+        <div><a href="#colecao" data-whatsapp-general>Fale com a Mary Santos Confeitaria ↗</a></div>
       </div>
     </div>
-    <div class="footer-legal">
-      &copy; 2026 Mary Santos Confeitaria. Todos os direitos reservados.
+    <div class="footer-inner footer-legal">
+      <span>© <span id="current-year"></span> Mary Santos Confeitaria. Todos os direitos reservados.</span>
+      <span>Feito para celebrar momentos especiais.</span>
     </div>
   </footer>
 
-  <!-- AOS Script com tratamento de falhas e fallback para garantir renderização em WebViews mobile -->
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <!-- Interações do site: menu mobile, ano automático e links dinâmicos de WhatsApp. -->
   <script>
-    try {
-      if (typeof AOS !== 'undefined') {
-        AOS.init({
-          duration: 800,
-          once: true,
-          offset: 50
-        });
-      }
-    } catch (e) {
-      console.warn('AOS falhou ao carregar, aplicando fallback de visibilidade.', e);
+    // ================================================================
+    // CONFIGURAÇÃO PRINCIPAL
+    // Substitua pelo WhatsApp comercial: país + DDD + número, somente dígitos.
+    // Exemplo de formato brasileiro: 5511999999999 (não use +, espaços ou traços).
+    // ================================================================
+    const WHATSAPP_NUMBER = "55DDDNUMERO";
+
+    // Cria a URL com a mensagem já preenchida para o produto escolhido.
+    function createWhatsAppUrl(message) {
+      const cleanNumber = WHATSAPP_NUMBER.replace(/\D/g, "");
+      const validNumber = /^\d{12,13}$/.test(cleanNumber);
+
+      if (!validNumber) return null;
+
+      return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
     }
 
-    // Toggle menu mobile simples
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    if (menuToggle && navLinks) {
-      menuToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('is-open');
+    // Configura botões individuais com o nome do produto na mensagem.
+    document.querySelectorAll("[data-whatsapp-product]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const productName = button.dataset.whatsappProduct;
+        const message = `Olá! Gostaria de encomendar o produto ${productName} do catálogo de Natal.`;
+        const url = createWhatsAppUrl(message);
+
+        if (!url) {
+          event.preventDefault();
+          alert("Configure o número comercial no início do JavaScript (variável WHATSAPP_NUMBER) antes de publicar o catálogo.");
+          return;
+        }
+
+        event.preventDefault();
+        window.open(url, "_blank", "noopener,noreferrer");
+      });
+    });
+
+    // Configura os botões gerais de contato.
+    document.querySelectorAll("[data-whatsapp-general]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const url = createWhatsAppUrl("Olá! Gostaria de mais informações sobre o catálogo de Natal da Mary Santos Confeitaria.");
+
+        if (!url) {
+          event.preventDefault();
+          alert("Configure o número comercial no início do JavaScript (variável WHATSAPP_NUMBER) antes de publicar o catálogo.");
+          return;
+        }
+
+        event.preventDefault();
+        window.open(url, "_blank", "noopener,noreferrer");
+      });
+    });
+
+    // Menu compacto para dispositivos móveis.
+    const menuToggle = document.getElementById("menu-toggle");
+    const siteNav = document.getElementById("site-nav");
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = siteNav.classList.toggle("is-open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "Fechar menu" : "Abrir menu");
+    });
+
+    // Fecha o menu após a seleção de uma seção.
+    siteNav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        siteNav.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Abrir menu");
+      });
+    });
+
+    // Atualiza o ano do rodapé automaticamente.
+    document.getElementById("current-year").textContent = new Date().getFullYear();
+  </script>
+
+  <!-- Efeitos visuais: 100% progressivos. Se este script falhar, nada fica escondido. -->
+  <script>
+  (function () {
+    "use strict";
+    var root = document.documentElement;
+    var lite = root.className.indexOf("fx-lite") > -1;
+    var reduce = false, fine = false;
+    try { reduce = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+    try { fine = matchMedia("(hover: hover) and (pointer: fine)").matches; } catch (e) {}
+    var full = !lite && !reduce;
+    function $(q, r) { return (r || document).querySelector(q); }
+    function $$(q, r) { return Array.prototype.slice.call((r || document).querySelectorAll(q)); }
+    function safe(fn) { try { fn(); } catch (e) { if (window.console) console.warn("[efeitos]", e); } }
+    function clamp(v) { return Math.min(1, Math.max(0, v)); }
+
+    var coll = $(".collection"), bar = $(".scroll-progress"), header = $(".site-header");
+    var links = $$(".nav-links a"), pending = [], ticking = false, live = false, snow = null;
+    var secs = ["inicio", "colecao", "encomendas"].map(function (id) { return document.getElementById(id); }).filter(Boolean);
+
+    function cardIn(card) { card.classList.add("is-in"); }
+
+    // ---- reveal ao rolar (sem IntersectionObserver: checagem por scroll + intervalo de segurança)
+    function show(el) {
+      var delay = parseInt(el.getAttribute("data-delay"), 10) || 0;
+      el.classList.add("rv-anim"); el.style.transitionDelay = delay + "ms"; el.classList.remove("rv-hide");
+      setTimeout(function () { el.classList.remove("rv-anim"); el.style.transitionDelay = ""; }, 1100 + delay);
+      if (el.classList.contains("product-card")) cardIn(el);
+    }
+    function check() {
+      var vh = window.innerHeight || root.clientHeight, left = [];
+      pending.forEach(function (el) { if (el.getBoundingClientRect().top < vh * 0.92) show(el); else left.push(el); });
+      pending = left;
+    }
+
+    // ---- scroll
+    function setLive(v) {
+      if (v === live || !coll) return;
+      live = v; coll.classList.toggle("is-live", v);
+      if (snow) { if (v) snow.start(); else snow.stop(); }
+    }
+    function onScroll() {
+      ticking = false;
+      var vh = window.innerHeight || root.clientHeight, y = window.pageYOffset || root.scrollTop, h = root.scrollHeight - vh;
+      if (bar) bar.style.transform = "scaleX(" + (h > 0 ? clamp(y / h) : 0) + ")";
+      if (header) header.classList.toggle("is-scrolled", y > 24);
+      if (pending.length) check();
+      var cur = null;
+      secs.forEach(function (s) { if (s.getBoundingClientRect().top <= vh * 0.45) cur = s.id; });
+      links.forEach(function (l) { l.classList.toggle("is-active", !!cur && l.getAttribute("href") === "#" + cur); });
+      if (coll) {
+        var r = coll.getBoundingClientRect();
+        setLive(r.bottom > 0 && r.top < vh);
+        if (full) coll.style.setProperty("--p", clamp((vh - r.top) / (vh + r.height)).toFixed(3));
+      }
+    }
+    function req() { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }
+    if (full) {
+    window.addEventListener("scroll", req, { passive: true });
+    window.addEventListener("touchmove", req, { passive: true });
+    window.addEventListener("resize", req);
+    window.addEventListener("load", req);
+    var iv = setInterval(function () { if (!pending.length) clearInterval(iv); else check(); }, 700);
+    }
+
+    // ---- esconde SOMENTE o que está abaixo da dobra (depois dos listeners, para nunca ficar preso)
+    if (full) safe(function () {
+      var vh = window.innerHeight || root.clientHeight;
+      $$("[data-reveal]").forEach(function (el) {
+        if (el.getBoundingClientRect().top > vh * 0.92) { el.classList.add("rv-hide"); pending.push(el); }
+        else if (el.classList.contains("product-card")) cardIn(el);
+      });
+    });
+    safe(function () { $$(".hero-dessert-card").forEach(function (c, i) { c.style.setProperty("--i", i); }); });
+
+    // ---- luzinhas de Natal (estáticas no lite, piscando no full)
+    var garland = $(".garland"), COLORS = ["#ffd36b", "#ff5d5d", "#fff1c9", "#6fe3a0", "#ffd36b", "#ff8a5c"];
+    function buildGarland(w) {
+      if (!garland || !w) return;
+      var n = Math.max(2, Math.round(w / 230)), sw = w / n, sag = Math.min(64, sw * 0.2), hh = Math.round(6 + sag + 34), wire = "M0 6", out = "", i, j;
+      for (i = 0; i < n; i++) wire += " Q" + (sw * i + sw / 2).toFixed(1) + " " + (6 + sag * 2).toFixed(1) + " " + (sw * (i + 1)).toFixed(1) + " 6";
+      for (i = 0; i < n; i++) {
+        var x0 = sw * i, cx = x0 + sw / 2, x1 = x0 + sw;
+        for (j = 0; j < 5; j++) {
+          var t = 0.12 + 0.19 * j, u = 1 - t;
+          var x = (u * u * x0 + 2 * u * t * cx + t * t * x1).toFixed(1), y = u * u * 6 + 2 * u * t * (6 + sag * 2) + t * t * 6;
+          var c = COLORS[(i * 5 + j) % COLORS.length], d = (((i * 5 + j) * 0.43) % 2.8).toFixed(2);
+          out += '<g class="bulb" style="--c:' + c + ";--d:-" + d + 's"><line x1="' + x + '" y1="' + y.toFixed(1) + '" x2="' + x + '" y2="' + (y + 8).toFixed(1) + '" stroke="#7a5d18" stroke-width="2"/><circle class="halo" cx="' + x + '" cy="' + (y + 17).toFixed(1) + '" r="15"/><ellipse class="glass" cx="' + x + '" cy="' + (y + 17).toFixed(1) + '" rx="4.6" ry="7"/></g>';
+        }
+      }
+      garland.style.height = hh + "px";
+      garland.innerHTML = '<svg width="' + w + '" height="' + hh + '" viewBox="0 0 ' + w + " " + hh + '"><path d="' + wire + '" fill="none" stroke="#8a6d1f" stroke-width="1.6"/>' + out + "</svg>";
+    }
+
+    // ---- neve em canvas: SOMENTE modo full (no lite usa a neve CSS leve)
+    var cv = $(".collection-fx"), W = 0, H = 0, parts = [], raf = 0, last = 0, ptr = { x: -999, y: -999 }, ctx = null;
+    if (full && cv && cv.getContext) {
+      safe(function () {
+        ctx = cv.getContext("2d");
+        var sprite = function (c1, c2) {
+          var o = document.createElement("canvas"); o.width = o.height = 32;
+          var g = o.getContext("2d"), gr = g.createRadialGradient(16, 16, 0, 16, 16, 16);
+          gr.addColorStop(0, c1); gr.addColorStop(0.35, c2); gr.addColorStop(1, "rgba(255,255,255,0)");
+          g.fillStyle = gr; g.fillRect(0, 0, 32, 32); return o;
+        };
+        var snowS = sprite("rgba(255,255,255,1)", "rgba(255,255,255,.55)"), goldS = sprite("rgba(255,236,170,1)", "rgba(236,200,100,.5)");
+        var mk = function (init) {
+          var z = Math.random(), gold = Math.random() < 0.14;
+          return { x: Math.random() * W, y: init ? Math.random() * H : -12, z: z, gold: gold, r: gold ? 3 + z * 4 : 1.2 + z * 3.2, vy: 0.25 + z * 0.9, vx: 0, ph: Math.random() * 6.28, sw: 0.4 + Math.random() * 0.9, tw: Math.random() * 6.28 };
+        };
+        var frame = function (t) {
+          var dt = Math.min(2.2, (t - last) / 16.67 || 1); last = t;
+          ctx.clearRect(0, 0, W, H);
+          for (var k = 0; k < parts.length; k++) {
+            var p = parts[k];
+            p.ph += 0.012 * dt * p.sw;
+            p.x += (Math.sin(p.ph) * 0.35 * p.sw + p.vx) * dt; p.y += p.vy * dt;
+            var dx = p.x - ptr.x, dy = p.y - ptr.y, d2 = dx * dx + dy * dy;
+            if (d2 < 12100) { var d = Math.sqrt(d2) || 1; p.vx += dx / d * ((110 - d) / 110) * 0.5; }
+            p.vx *= 0.94;
+            if (p.y > H + 12 || p.x < -20 || p.x > W + 20) parts[k] = p = mk(false);
+            if (p.gold) { p.tw += 0.05 * dt; ctx.globalAlpha = 0.35 + 0.65 * Math.abs(Math.sin(p.tw)); ctx.drawImage(goldS, p.x - p.r * 2, p.y - p.r * 2, p.r * 4, p.r * 4); }
+            else { ctx.globalAlpha = 0.25 + p.z * 0.65; var s = p.r * 2.6; ctx.drawImage(snowS, p.x - s / 2, p.y - s / 2, s, s); }
+          }
+          ctx.globalAlpha = 1;
+          raf = requestAnimationFrame(frame);
+        };
+        snow = {
+          start: function () { cancelAnimationFrame(raf); last = performance.now(); raf = requestAnimationFrame(frame); },
+          stop: function () { cancelAnimationFrame(raf); },
+          seed: function (w) { var n = Math.round(Math.min(w < 700 ? 55 : 140, Math.max(40, w / 9))); parts = []; for (var i = 0; i < n; i++) parts.push(mk(true)); }
+        };
+        if (fine) {
+          coll.addEventListener("pointermove", function (e) { var r = coll.getBoundingClientRect(); ptr.x = e.clientX - r.left; ptr.y = e.clientY - r.top; });
+          coll.addEventListener("pointerleave", function () { ptr.x = ptr.y = -999; });
+        }
+        document.addEventListener("visibilitychange", function () { if (document.hidden) snow.stop(); else if (live) snow.start(); });
       });
     }
+    function layout() {
+      if (!coll) return;
+      var w = coll.clientWidth, h = coll.clientHeight, widthChanged = w !== W;
+      W = w; H = h;
+      if (ctx) { var dpr = Math.min(window.devicePixelRatio || 1, 2); cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+      if (widthChanged) { if (snow) snow.seed(w); buildGarland(w); }
+    }
+    safe(layout);
+    if ("ResizeObserver" in window && coll) safe(function () { new ResizeObserver(function () { requestAnimationFrame(function () { safe(layout); }); }).observe(coll); });
+    else window.addEventListener("resize", function () { safe(layout); });
+
+    // ---- extras (só full): aura do panetone, tilt 3D, parallax do hero, brilhos ao encomendar
+    if (full) {
+      if (fine) safe(function () {
+        $$(".product-card").forEach(function (card) {
+          card.addEventListener("pointermove", function (e) {
+            var r = card.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+            card.style.setProperty("--mx", x * 100 + "%"); card.style.setProperty("--my", y * 100 + "%");
+            card.style.setProperty("--rx", ((0.5 - y) * 7).toFixed(2) + "deg"); card.style.setProperty("--ry", ((x - 0.5) * 9).toFixed(2) + "deg");
+          });
+          card.addEventListener("pointerleave", function () { card.style.setProperty("--rx", "0deg"); card.style.setProperty("--ry", "0deg"); });
+        });
+        var hero = $(".hero"), grid = $(".hero-dessert-grid");
+        if (hero && grid) {
+          hero.addEventListener("pointermove", function (e) {
+            var r = hero.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+            grid.style.transform = "perspective(1100px) rotateY(" + x * 6 + "deg) rotateX(" + -y * 5 + "deg)";
+          });
+          hero.addEventListener("pointerleave", function () { grid.style.transform = ""; });
+        }
+      });
+      safe(function () {
+        var burst = function (x, y) {
+          if (!document.body.animate) return;
+          for (var i = 0; i < 12; i++) {
+            var s = document.createElement("span"), a = Math.random() * Math.PI * 2, d = 40 + Math.random() * 70;
+            s.className = "spark"; s.textContent = i % 3 ? "✦" : "✧";
+            s.style.cssText = "left:" + x + "px;top:" + y + "px;font-size:" + (10 + Math.random() * 12) + "px";
+            document.body.appendChild(s);
+            (function (el) {
+              el.animate([
+                { transform: "translate(-50%,-50%) scale(.4)", opacity: 1 },
+                { transform: "translate(calc(-50% + " + Math.cos(a) * d + "px), calc(-50% + " + (Math.sin(a) * d - 20) + "px)) scale(1.1)", opacity: 0 }
+              ], { duration: 700 + Math.random() * 500, easing: "cubic-bezier(.2,.8,.3,1)" }).onfinish = function () { el.remove(); };
+            })(s);
+          }
+        };
+        $$("[data-whatsapp-product],[data-whatsapp-general]").forEach(function (b) {
+          b.addEventListener("click", function (e) { var r = b.getBoundingClientRect(); burst(e.clientX || r.left + r.width / 2, e.clientY || r.top + r.height / 2); });
+        });
+      });
+    }
+    // ripple nos botões (leve; vale para todos)
+    if (full) safe(function () {
+      $$(".button-primary,.product-order,.header-cta").forEach(function (b) {
+        b.addEventListener("pointerdown", function (e) {
+          var r = b.getBoundingClientRect(), s = Math.max(r.width, r.height) * 2, d = document.createElement("span");
+          d.className = "ripple";
+          d.style.cssText = "width:" + s + "px;height:" + s + "px;left:" + (e.clientX - r.left - s / 2) + "px;top:" + (e.clientY - r.top - s / 2) + "px";
+          b.appendChild(d); d.addEventListener("animationend", function () { d.remove(); });
+        });
+      });
+    });
+
+    if (full) onScroll();
+  })();
   </script>
 </body>
 </html>
